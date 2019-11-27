@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xpp.dao.ProductDao">
+    <insert id="insert">
+     insert into product values(default,#{productName},#{productSum},#{productPrice},#{status.statusId})
+    </insert>
+    <update id="update">
+         update product set product_sum=#{productSum},product_price=#{productPrice},status_id=#{status.statusId}
+        where product_id=#{productId}
+    </update>
+    <delete id="delete">
+        delete from product where product_id=#{productId}
+    </delete>
+    <select id="selectAll" resultMap="prodctMap">
+        select * from product
+        <where>
+            <if test="statusId!=null and statusId!=''">
+                <if test="statusId!=0">
+                    and  status_id=#{statusId}
+                </if>
+            </if>
+            <if test="productName!=null and productName!=''">
+                and product_name like concat('%',#{productName},'%')
+            </if>
+        </where>
+    </select>
+    <select id="selectone" resultMap="prodctMap">
+         select * from product where product_id=#{productId}
+    </select>
+
+    <resultMap id="prodctMap" type="com.xpp.po.Product">
+        <id property="productId" column="product_id"/>
+        <result property="productName" column="product_name"/>
+        <result property="productSum" column="product_sum"/>
+        <result property="productPrice" column="product_price"/>
+        <association property="status" select="com.xpp.dao.StatusDao.selectId" column="status_id"/>
+    </resultMap>
+</mapper>

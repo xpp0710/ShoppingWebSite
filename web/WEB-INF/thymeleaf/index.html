@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet"/>
+</head>
+<body>
+<nav class="navbar navbar-light bg-light">
+    <form class="form-inline" action="/product/select" method="post">
+        商品状态 : &nbsp;&nbsp;&nbsp;
+        <select class="form-control mr-sm-2" name="statusId">
+            <option value="0">请选择</option>
+            <option th:each="sta:${list2}" th:text="${sta.statusName}" th:selected="${statusId!=0}?${statusId}==${sta.statusId}"  th:value="${sta.statusId}"></option>
+        </select>&nbsp;&nbsp;&nbsp;&nbsp;
+        商品名称 : &nbsp;&nbsp;&nbsp;
+        <input class="form-control mr-sm-2" name="productName" th:value="${productName!=null}?${productName}" type="search" placeholder="ProductName" aria-label="Search">
+        &nbsp;&nbsp; <button class="btn btn-success my-2 my-sm-0" type="submit">查询</button>
+    </form>
+</nav>
+<a href="/product/toInsert">新增</a>
+<table class="table table-striped table-bordered table-hover">
+    <thead class="thead-dark">
+    <tr align="center">
+        <td>商品编号</td>
+        <td>英雄名称</td>
+        <td>商品价格</td>
+        <td>商品库存</td>
+        <td>商品状态</td>
+        <td>操作</td>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="p:${list}" align="center">
+        <td th:text="${p.productId}"></td>
+        <td th:text="${p.productName}"></td>
+        <td th:text="${p.productPrice}"></td>
+        <td th:text="${p.productSum}"></td>
+      <td th:text="${p.status.statusName}"></td>
+        <td>
+           <a th:href="@{/product/selectone(product_id=${p.productId})}" class="btn btn-info btn-sm active" role="button" aria-pressed="true">修改</a>
+            <a th:href="@{/product/delete(product_id=${p.productId})}" class="btn btn-info btn-sm active" onclick="return confirm('确定要删除吗？')" role="button" aria-pressed="true">删除</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>
